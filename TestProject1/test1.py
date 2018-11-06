@@ -6,5 +6,5 @@ cur=db.cursor()
 cur.execute("select * from test1;")
 data=cur.fetchall()
 print (data)
-#123
+#test
 
