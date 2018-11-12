@@ -4,6 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from Apply1.models import Event,Guest #导入模型文件中的模型类
+from django.db.models import Q
 
 def index(request):
     return render(request,"index.html")
@@ -36,3 +37,18 @@ def search_name(request):
     search_name=request.GET.get("name","")
     event_list=Event.objects.filter(name__contains=search_name)
     return render(request,"event_manage.html",{"user":username,"events":event_list})
+#嘉宾页面
+@login_required
+def guest_manage(request):
+     # 获取所有嘉宾数据
+    guest_list=Guest.objects.all()
+    # 获取浏览器中的session
+    username=request.session.get("user","")
+    return render(request,"guest_manage.html",{"user":username,"guests":guest_list})
+#嘉宾搜索视图
+@login_required
+def search_guest(request):
+    username = request.session.get("user", "")
+    search_name=request.GET.get("name","")
+    guest_list=Guest.objects.filter(Q(realname__contains=search_name)|Q(phone__contains=search_name))
+    return render(request,"guest_manage.html",{"user":username,"guests":guest_list})
