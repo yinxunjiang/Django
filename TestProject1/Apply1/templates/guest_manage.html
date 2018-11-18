@@ -31,7 +31,7 @@
         <div id="navbar-search" class="navbar-collapse collapse">
             <form class="navbar-form" method="get" action="/search_guest/">
                 <div class="form-group">
-                    <input name="name" type="text" placeholder="姓名或手机号" class="form-control">
+                    <input name="key" type="text" placeholder="姓名或手机号" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-success">搜索</button>
             </form>
@@ -53,6 +53,13 @@
                         <td>{{guest.realname}}</td>
                         <td>{{guest.phone}}</td>
                         <td>{{guest.email}}</td>
+                        <!--
+                        {%if guest.sign%}
+                        <td>已签到</td>
+                        {%else%}
+                        <td>未签到</td>
+                        {%endif%}
+                        -->
                         <td>{{guest.sign}}</td>
                         <td>{{guest.event}}</td>
                     </tr>
@@ -60,6 +67,20 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <!-- 列表分页器-->
+    <div class="paginator">
+        <span class="step-links">
+            {%if guests.has_previous%}
+            <a href="?page={{guests.previous_page_number}}}">上一页</a>
+            {%endif%}
+            <span class="current">
+                Page{{guests.number}} of {{guests.paginator.num_pages}}
+            </span>
+            {%if guests.has_next%}
+            <a href="?page={{guests.next_page_number}}">下一页</a>
+            {%endif%}
+        </span>
     </div>
 </body>
 </html>

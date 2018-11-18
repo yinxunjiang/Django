@@ -4,7 +4,8 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from Apply1.models import Event,Guest #导入模型文件中的模型类
-from django.db.models import Q
+from django.db.models import Q,F
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 def index(request):
     return render(request,"index.html")
@@ -44,11 +45,38 @@ def guest_manage(request):
     guest_list=Guest.objects.all()
     # 获取浏览器中的session
     username=request.session.get("user","")
-    return render(request,"guest_manage.html",{"user":username,"guests":guest_list})
+     #定义分页类对象
+    paginator=Paginator(guest_list,2)
+     #获取页数
+    page=request.GET.get("page")
+    try:
+        #获取每页的对象数据
+        contacts=paginator.page(page)
+    except PageNotAnInteger:
+        #如果page不是整数，取第一页数据
+        contacts=paginator.page(1)
+    except EmptyPage:
+        #如果page不在范围，取最后一页
+        contacts=paginator.page(paginator.num_pages)
+    return render(request,"guest_manage.html",{"user":username,"guests":contacts})
 #嘉宾搜索视图
 @login_required
 def search_guest(request):
     username = request.session.get("user", "")
-    search_name=request.GET.get("name","")
+    search_name=request.GET.get("key","")
     guest_list=Guest.objects.filter(Q(realname__contains=search_name)|Q(phone__contains=search_name))
-    return render(request,"guest_manage.html",{"user":username,"guests":guest_list})
+    # 定义分页类对象
+    paginator = Paginator(guest_list, 2)
+    # 获取页数
+    page = request.GET.get("page")
+    try:
+        # 获取每页的对象数据
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # 如果page不是整数，取第一页数据
+        contacts = paginator.page(1)
+    except EmptyPage:
+        # 如果page不在范围，取最后一页
+        contacts = paginator.page(paginator.num_pages)
+    return render(request, "guest_manage.html", {"user": username, "guests": contacts})
+
