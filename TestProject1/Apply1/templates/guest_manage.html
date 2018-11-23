@@ -72,13 +72,13 @@
     <div class="paginator">
         <span class="step-links">
             {%if guests.has_previous%}
-            <a href="?key={{search}}&page={{guests.previous_page_number}}">上一页</a>
+            <a href="?key={{keyword}}&page={{guests.previous_page_number}}">上一页</a>
             {%endif%}
             <span class="current">
                  第{{guests.number}}页 of {{guests.paginator.num_pages}}
             </span>
             {%if guests.has_next%}
-            <a href="?key={{search}}&page={{guests.next_page_number}}">下一页</a>
+            <a href="?key={{keyword}}&page={{guests.next_page_number}}">下一页</a>
             {%endif%}
         </span>
     </div>

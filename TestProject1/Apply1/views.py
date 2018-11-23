@@ -64,6 +64,8 @@ def guest_manage(request):
 def search_guest(request):
     username = request.session.get("user", "")
     search_name=request.GET.get("key","")
+    request.session["keyword"] = search_name
+    keyword=request.session.get("keyword")
     guest_list=Guest.objects.filter(Q(realname__contains=search_name)|Q(phone__contains=search_name))
     # 定义分页类对象
     paginator = Paginator(guest_list, 2)
@@ -78,5 +80,5 @@ def search_guest(request):
     except EmptyPage:
         # 如果page不在范围，取最后一页
         contacts = paginator.page(paginator.num_pages)
-    return render(request, "guest_manage.html", {"user": username, "guests": contacts})
+    return render(request, "guest_manage.html", {"user": username, "guests": contacts, "keyword":keyword})
 
