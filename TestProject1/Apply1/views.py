@@ -43,42 +43,47 @@ def search_name(request):
 def guest_manage(request):
      # 获取所有嘉宾数据
     guest_list=Guest.objects.all()
-    # 获取浏览器中的session
+    # 获取浏览器中的user session
     username=request.session.get("user","")
      #定义分页类对象
     paginator=Paginator(guest_list,2)
-     #获取页数
+     #根据get请求中url的参数page获取当前的页数
     page=request.GET.get("page")
     try:
-        #获取每页的对象数据
+        #根据获取到的页数来获取某一页的对象数据
         contacts=paginator.page(page)
     except PageNotAnInteger:
-        #如果page不是整数，取第一页数据
+        #如果没有page页，则会抛出PageNotAnInteger异常，此时让其返回第一页数据
         contacts=paginator.page(1)
     except EmptyPage:
-        #如果page不在范围，取最后一页
+        #如果page超出范围，将会抛出EmptyPage异常，此时让其返回最后一页数据
         contacts=paginator.page(paginator.num_pages)
     return render(request,"guest_manage.html",{"user":username,"guests":contacts})
 #嘉宾搜索视图
 @login_required
 def search_guest(request):
+    # 获取session中获取user信息
     username = request.session.get("user", "")
+    #获取浏览器中的搜索关键词
     search_name=request.GET.get("key","")
+    #将关键词信息存到session里，起名keyword
     request.session["keyword"] = search_name
+    #从session中获取关键词信息
     keyword=request.session.get("keyword")
+    #获取搜索结果
     guest_list=Guest.objects.filter(Q(realname__contains=search_name)|Q(phone__contains=search_name))
     # 定义分页类对象
     paginator = Paginator(guest_list, 2)
-    # 获取页数
+    # 根据get请求中url的参数page获取当前的页数
     page = request.GET.get("page")
     try:
-        # 获取每页的对象数据
+        # 根据获取到的页数来获取某一页的对象数据
         contacts = paginator.page(page)
     except PageNotAnInteger:
-        # 如果page不是整数，取第一页数据
+        # 如果没有page页，则会抛出PageNotAnInteger异常，此时让其返回第一页数据
         contacts = paginator.page(1)
     except EmptyPage:
-        # 如果page不在范围，取最后一页
+        # 如果page超出范围，将会抛出EmptyPage异常，此时让其返回最后一页数据
         contacts = paginator.page(paginator.num_pages)
     return render(request, "guest_manage.html", {"user": username, "guests": contacts, "keyword":keyword})
 
