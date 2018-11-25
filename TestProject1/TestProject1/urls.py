@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 from Apply1 import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +28,7 @@ urlpatterns = [
     path('search_name/',views.search_name),
     path('guest_manage/',views.guest_manage),
     path('search_guest/',views.search_guest),
+    re_path('sign_index/(?P<eid>[0-9]+)',views.sign_index),
+    re_path('sign_index_action/(?P<eid>[0-9]+)',views.sign_index_action),
 
 ]
