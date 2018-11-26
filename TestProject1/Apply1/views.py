@@ -99,10 +99,10 @@ def sign_index_action(request,eid):
     phone=request.POST.get("phone","")
     result=Guest.objects.filter(phone=phone)
     if not result:
-        return render(request,"sign_index.html",{"event":event,"hint":"手机号有误"})
+        return render(request,"sign_index.html",{"event":event,"hint":"没有此手机号信息"})
     result=Guest.objects.filter(phone=phone,event_id=eid)
     if not result:
-        return render(request,"sign_index.html",{"event":event,"hint":"发布会id或手机号有误"})
+        return render(request,"sign_index.html",{"event":event,"hint":"手机号与发布会信息不匹配"})
     result = Guest.objects.get(phone=phone, event_id=eid)
     if result.sign:
         return render(request, "sign_index.html", {"event": event, "hint": "嘉宾已签到"})
