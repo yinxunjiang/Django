@@ -109,3 +109,30 @@ def sign_index_action(request,eid):
     else:
         Guest.objects.filter(phone=phone,event_id=eid).update(sign=1)
         return render(request, "sign_index.html", {"event": event, "hint": "签到成功","guest":result})
+
+#退出登录
+@login_required
+def logout(request):
+    auth.logout(request)
+    response=HttpResponseRedirect('/index/')
+    return response
+
+#添加嘉宾
+def add_guest(request):
+    event_list=Event.objects.all()
+    if request.method == "POST":
+        selected = request.POST.get("dropdown","")
+        realname=request.POST.get("realname","")
+        phone=request.POST.get("phone","")
+        email=request.POST.get("email","")
+        sign=request.POST.get("sign","")
+        #print(selected,realname,phone,email,sign)
+        if sign:
+            sign=1
+        else:
+            sign=0
+        print(sign)
+        g=Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
+        g.save()
+        #Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
+        return render(request,"add_guest.html",{"events":event_list})

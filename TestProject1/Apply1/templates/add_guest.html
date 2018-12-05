@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <meta charset="UTF-8">
+    <title>发布会管理系统</title>
+</head>
+<body >
+    <!--导航栏-->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/event_manage/">发布会管理系统</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">嘉宾注册</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--嘉宾注册-->
+    <div class="row" style="padding-top: 80px" >
+            <form role="form" class="form-horizontal" method="post" action="#">
+                <div class="form-group event" >
+                    <label class="col-sm-2 control-label" for="id_event">发布会</label>
+                    <div class="col-sm-4">
+                        <select name="dropdown" class="form-control">
+                            <option value="" selected>请选择</option>
+                            {% for event in events %}
+                            <option id="event_selected" value="{{ event.id }}">{{ event.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group realname">
+                    <label class="col-sm-2 control-label" for="id_realname">姓名</label>
+                    <div class="col-sm-4">
+                        <input name="realname" type="text" placeholder="姓名" class="form-control" maxlength="64">
+                    </div>
+                </div>
+                <div class="form-group phone">
+                    <label class="col-sm-2 control-label" for="id_phone">手机号</label>
+                    <div class="col-sm-4">
+                        <input name="phone" type="text" placeholder="手机号" class="form-control" maxlength="11">
+                    </div>
+                </div>
+                <div class="form-group email">
+                    <label class="col-sm-2 control-label" for="id_email">邮箱</label>
+                    <div class="col-sm-4">
+                    <input name="email" type="text" placeholder="邮箱" class="form-control" >
+                    </div>
+                </div>
+                <div class="form-group sign">
+                    <label class="col-sm-2 control-label vCheckboxLabel" for="id_sign">签到</label>
+                    <input name="sign" type="checkbox" style="width: 25px; height:25px;">
+                </div>
+            <div class="col-sm-10" style="text-align: center">
+                <button type="submit" class="btn btn-success">提交</button>
+            </div>
+            {% csrf_token %}
+            </form>
+    </div>
+</body>
+</html>
