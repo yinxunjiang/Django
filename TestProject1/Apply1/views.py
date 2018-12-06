@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from Apply1.models import Event,Guest #导入模型文件中的模型类
 from django.db.models import Q,F
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
-
+from datetime import datetime
 def index(request):
     return render(request,"index.html")
 
@@ -46,7 +46,7 @@ def guest_manage(request):
     # 获取浏览器中的user session
     username=request.session.get("user","")
      #定义分页类对象
-    paginator=Paginator(guest_list,2)
+    paginator=Paginator(guest_list,5)
      #根据get请求中url的参数page获取当前的页数
     page=request.GET.get("page")
     try:
@@ -73,7 +73,7 @@ def search_guest(request):
     #获取搜索结果
     guest_list=Guest.objects.filter(Q(realname__contains=search_name)|Q(phone__contains=search_name))
     # 定义分页类对象
-    paginator = Paginator(guest_list, 2)
+    paginator = Paginator(guest_list, 5)
     # 根据get请求中url的参数page获取当前的页数
     page = request.GET.get("page")
     try:
@@ -128,11 +128,17 @@ def add_guest(request):
         sign=request.POST.get("sign","")
         #print(selected,realname,phone,email,sign)
         if sign:
-            sign=1
+            sign=True
         else:
-            sign=0
-        print(sign)
-        g=Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
-        g.save()
-        #Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
+            sign=False
+        #print(selected, realname, phone, email, sign)
+        guest=Guest.objects.filter(phone=phone,event_id=selected)
+        #guest=get_object_or_404(Guest,phone=phone,event_id=selected)
+        print(guest)
+        if guest:
+            return render(request, "add_guest.html", {"events": event_list,"hint":"用户已登记此发布会","flag":"red"})
+        else:
+            Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
+            return render(request, "add_guest.html", {"events": event_list, "hint": "用户登记成功","flag":"greenyellow"})
+    else:
         return render(request,"add_guest.html",{"events":event_list})

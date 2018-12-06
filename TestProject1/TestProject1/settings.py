@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qje$8nb%43k!g+5ajvd(%!&$**opw4d6rr%obipphem&d_kqz0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ["*"]
+#DEBUG = False
+DEBUG=True
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -119,13 +119,15 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+#TIME_ZONE='Asia/Shanghai' 若采用北京时间，需要将值设置为Asia/Shanghai，
+#但对于Windows系统，若USE_TZ = False，则TIME_ZONE不起作用，故无需特殊设置
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
+#将其设置为False，对Windows系统而言，会默认使用本机时间，否则使用的是美国时间，会比北京时间晚8小时
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
