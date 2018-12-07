@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <meta charset="UTF-8">
+    <title>发布会管理系统</title>
+</head>
+<body >
+    <!--导航栏-->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/event_manage/">发布会管理系统</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li ><a href="/event_manage/">发布会</a></li>
+                    <li ><a href="/guest_manage/">嘉宾</a></li>
+                    <li ><a href="/guest/add/">嘉宾登记</a></li>
+                    <li class="active"><a href="#">Bug列表</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--查询表单-->
+    <div class="row" style="padding-top: 80px" >
+            <form role="form" class="form-horizontal" method="post" action="">
+                <div class="form-group jira-name" >
+                    <label class="col-sm-2 control-label" for="id_name">Jira用户名</label>
+                    <div class="col-sm-3">
+                        <input name="jiraname" type="text" placeholder="用户名" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group jira-password">
+                    <label class="col-sm-2 control-label" for="id_password">密码</label>
+                    <div class="col-sm-3">
+                        <input name="jirapassword" type="password" placeholder="密码" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group jiraid">
+                    <label class="col-sm-2 control-label" for="id_jira">Jira编号</label>
+                    <div class="col-sm-3">
+                        <input name="jiraid" type="text" placeholder="Jira编号" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-10" style="padding-left: 350px">
+                    <button type="submit" class="btn btn-success" >查询</button>
+                </div>
+                {% csrf_token %}
+            </form>
+    </div>
+<!--bug列表-->
+    <div class="row" style="padding-top: 20px;">
+        <div class="col-md-10">
+            <table class="table table-striped">
+                <thead>
+                    <tr style="text-align: center">
+                        <th>序号</th>
+                        <th>bug列表</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bug in bugs %}
+                    <tr style="text-align: left">
+                        <td>{{forloop.counter}}</td>
+                        <td>{{bug}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,6 +7,8 @@ from Apply1.models import Event,Guest #导入模型文件中的模型类
 from django.db.models import Q,F
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from datetime import datetime
+import requests,re
+
 def index(request):
     return render(request,"index.html")
 
@@ -139,6 +141,28 @@ def add_guest(request):
             return render(request, "add_guest.html", {"events": event_list,"hint":"用户已登记此发布会","flag":"red"})
         else:
             Guest.objects.create(event_id=selected,realname=realname,phone=phone,email=email,sign=sign)
-            return render(request, "add_guest.html", {"events": event_list, "hint": "用户登记成功","flag":"greenyellow"})
+            return render(request, "add_guest.html", {"events": event_list, "hint": "用户登记成功","flag":"green"})
     else:
         return render(request,"add_guest.html",{"events":event_list})
+
+
+#获取bug列表
+def jira(request):
+    if request.method == "POST":
+        jira_name = request.POST.get("jiraname","")
+        jira_password=request.POST.get("jirapassword","")
+        # jd_user = auth.authenticate(username=jira_name, password=jira_password)  # 获取登录信息
+        # request.session["jd_user"] = jira_name
+        jira_id=request.POST.get("jiraid","")
+        payload = {}
+        payload["os_username"] = jira_name
+        payload["os_password"] = jira_password
+        jira_id =jira_id
+        result = requests.post("http://jira.jd.com/rest/gadget/1.0/login", data=payload)
+        cookies = result.cookies
+        result = requests.post("http://jira.jd.com/browse/{jiraid}".format(jiraid=jira_id), cookies=cookies)
+        bug_list = re.findall(r"<span title=\"(NEWPOPV.*?)\">", str(result.content, encoding="utf-8"))
+        return render(request, "jira.html", {"bugs":bug_list})
+    else:
+        bug_list=[]
+        return render(request, "jira.html", {"bugs":bug_list})

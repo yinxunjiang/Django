@@ -33,4 +33,5 @@ urlpatterns = [
     re_path('sign_index_action/(?P<eid>[0-9]+)',views.sign_index_action),
     path('logout/',views.logout),
     path('guest/add/',views.add_guest),
+    path('jira/',views.jira),
 ]
