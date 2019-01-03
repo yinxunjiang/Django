@@ -160,7 +160,7 @@ def jira(request):
         jira_id =jira_id
         result = requests.post("http://jira.jd.com/rest/gadget/1.0/login", data=payload)
         cookies = result.cookies
-        result = requests.post("http://jira.jd.com/browse/{jiraid}".format(jiraid=jira_id), cookies=cookies)
+        result = requests.post("http://jira.jd.com/browse/NEWPOPV-{jiraid}".format(jiraid=jira_id), cookies=cookies)
         bug_list = re.findall(r"<span title=\"(NEWPOPV.*?)\">", str(result.content, encoding="utf-8"))
         return render(request, "jira.html", {"bugs":bug_list})
     else:
