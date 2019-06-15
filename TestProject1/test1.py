@@ -1,20 +1,25 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
-from datetime import datetime
-import requests,re,urllib
+str="123456789"
+s1=str[0:3]
+s2=str[3:6]
+s3=str[6:]
+print(s1[::-1]+s2[::-1]+s3[::-1])
 
-payload={}
-payload["os_username"]="yinxunjiang"
-payload["os_password"]="Woainini@520"
+tmp=[]
+result=[]
+n=0
+for i in range(len(str)):
+    n+=1
+    tmp.append(str[i])
+    if n==3:
+        str_tmp=''.join(tmp[::-1])
+        result.append(str_tmp)
+        tmp=[]
+        n=0
+print(''.join(result))
 
-result=requests.post("http://jira.jd.com/rest/gadget/1.0/login",data=payload)
-#print(result.content.decode("utf-8"))
-cookies=result.cookies
-#print(cookies)
-jira_id="NEWPOPV-7286"
-result=requests.post("http://jira.jd.com/browse/{jiraid}".format(jiraid=jira_id),cookies=cookies)
 
-#print(result.content.decode("utf-8"))
-r=re.findall(r"<span title=\"(NEWPOPV.*?)\">",str(result.content,encoding="utf-8"))
-for i in r:
-    print(i)
+
+
+
+
