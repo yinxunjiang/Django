@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qje$8nb%43k!g+5ajvd(%!&$**opw4d6rr%obipphem&d_kqz0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-DEBUG=True
-ALLOWED_HOSTS = []
+DEBUG = False
+#DEBUG=True
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,12 +40,15 @@ INSTALLED_APPS = [
     'Apply1',
     'bootstrap3',
 ]
+BOOTSTRAP3={
+    'include_jquery':True
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # 注释掉就不检查跨站请求伪造了
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -82,6 +85,8 @@ WSGI_APPLICATION = 'TestProject1.wsgi.application'
 #     }
 # }
 #将django连接的数据库改为mysql数据库
+# import pymysql
+# pymysql.install_as_MySQLdb()
 DATABASES={
     'default':{
         'ENGINE':'django.db.backends.mysql', #数据驱动设置为mysql
@@ -116,8 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+#LANGUAGE_CODE = 'en-us' #默认设置的语言格式为英文
+LANGUAGE_CODE = 'zh-hans' #修改设置语言为中文
 TIME_ZONE = 'UTC'
 #TIME_ZONE='Asia/Shanghai' 若采用北京时间，需要将值设置为Asia/Shanghai，
 #但对于Windows系统，若USE_TZ = False，则TIME_ZONE不起作用，故无需特殊设置
